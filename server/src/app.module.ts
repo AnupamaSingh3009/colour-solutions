@@ -11,15 +11,22 @@ import { PageModule } from './page/page.module';
 import { Page } from './model/page.entity';
 import { CategoryModule } from './category/category.module';
 import Category from './model/category.entity';
-import {Product} from './model/product.entity';
+import { Product } from './model/product.entity';
 import { ProductPhotoEntity } from './model/product-photo.entity';
+import { ProductsModule } from './products/products.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal : true}),
+    ConfigModule.forRoot({ isGlobal: true }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../', 'product_images'),
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory : (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('POSTGRES_HOST'),
         schema: configService.get('POSTGRES_SCHEMA'),
@@ -27,27 +34,21 @@ import { ProductPhotoEntity } from './model/product-photo.entity';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DATABASE'),
-        entities: [
-          User,
-          Page,
-          Category,
-          Product,
-          ProductPhotoEntity
-        ],
+        entities: [User, Page, Category, Product, ProductPhotoEntity],
         synchronize: true,
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
     AuthModule,
     PageModule,
-    CategoryModule
+    CategoryModule,
+    ProductsModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
-  exports: [
-    ConfigModule
-  ]
+  exports: [ConfigModule],
 })
 export class AppModule {}

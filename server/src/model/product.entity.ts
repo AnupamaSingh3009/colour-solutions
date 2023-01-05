@@ -1,29 +1,35 @@
-import { Column, Entity, JoinColumn,  ManyToOne } from "typeorm";
-import Category from "./category.entity";
-import { BaseEntity } from "./base.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import Category from './category.entity';
+import { BaseEntity } from './base.entity';
+import { ProductPhotoEntity } from './product-photo.entity';
 
-@Entity({name: "products", schema: "catalog"})
+@Entity({ name: 'products', schema: 'catalog' })
 export class Product extends BaseEntity {
+  @Column({ type: String, nullable: false, unique: true })
+  name: string;
 
-    @Column({type: String, nullable: false, unique: true})
-    name: string;
+  @Column({ type: 'text' })
+  description: string;
 
-    @Column({type: 'text'})
-    description: string;
+  @Column({ type: 'float' })
+  price: number;
 
-    @Column({type: 'float'})
-    price: number;
+  @Column({ type: String })
+  size: string;
 
-    @Column({type: String})
-    size: string;
+  @Column({ type: String })
+  color: string;
 
-    @Column({type: String})
-    color: string;
+  @Column({ type: String })
+  material: string;
 
-    @Column({type: String})
-    material: string;
+  @ManyToOne(() => Category)
+  @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
+  category: Category;
 
-    @ManyToOne(() => Category)
-    @JoinColumn({name: 'category_id', referencedColumnName: 'id'})
-    category: Category;
+  @OneToMany(() => ProductPhotoEntity, (photoEntity) => photoEntity.product, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  photos: ProductPhotoEntity[];
 }

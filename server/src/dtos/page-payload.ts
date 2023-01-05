@@ -11,6 +11,8 @@ export class CreatePagePayload {
     createdBy: string;
 
     lastUpdatedBy: string;
+
+    link: string;
 }
 
 export class UpdatePagePayload extends CreatePagePayload{

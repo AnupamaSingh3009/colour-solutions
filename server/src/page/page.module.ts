@@ -13,5 +13,6 @@ import { AuthModule } from 'src/auth/auth.module';
   ],
   controllers: [PageController],
   providers: [PageService],
+  exports: [PageService],
 })
 export class PageModule {}

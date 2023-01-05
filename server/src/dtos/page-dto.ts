@@ -7,6 +7,8 @@ export interface PageStatus {
 export interface PageDto {
     id: string;
     title: string;
+
+    link: string;
     content: string;
     isActive: boolean;
     isArchived: boolean;

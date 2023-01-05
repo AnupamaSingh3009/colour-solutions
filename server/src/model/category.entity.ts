@@ -1,13 +1,17 @@
-import { Column, Entity } from "typeorm";
-import { BaseEntity } from "./base.entity";
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
+import { BaseEntity } from './base.entity';
+import { ProductPhotoEntity } from './product-photo.entity';
+import { Product } from './product.entity';
 
-@Entity({name: "categories", schema: "catalog"})
-export default class Category extends BaseEntity{
+@Entity({ name: 'categories', schema: 'catalog' })
+export default class Category extends BaseEntity {
+  @Column({ type: String, nullable: false, unique: true })
+  name: string;
 
-    @Column({type: String, nullable: false, unique: true})
-    name: string;
+  @Column({ type: 'text' })
+  description: string;
 
-    @Column({type: 'text'})
-    description: string;
-
+  @OneToMany(() => Product, (product) => product.category)
+  @JoinColumn()
+  products: Product[];
 }
