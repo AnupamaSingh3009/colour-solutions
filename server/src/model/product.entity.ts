@@ -2,6 +2,8 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import Category from './category.entity';
 import { BaseEntity } from './base.entity';
 import { ProductPhotoEntity } from './product-photo.entity';
+import { RoleEnum } from './role.enum';
+import { GenderEnum } from './gender.enum';
 
 @Entity({ name: 'products', schema: 'catalog' })
 export class Product extends BaseEntity {
@@ -32,4 +34,7 @@ export class Product extends BaseEntity {
   })
   @JoinColumn()
   photos: ProductPhotoEntity[];
+
+  @Column({ type: 'enum', enum: GenderEnum, default: GenderEnum.UNISEX })
+  gender: GenderEnum;
 }

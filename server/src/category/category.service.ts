@@ -37,7 +37,16 @@ export class CategoryService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const newCategory = this.categoryRepository.create(createCategoryPayload);
+    let parentCategory = undefined;
+    if (!!createCategoryPayload.parent) {
+      parentCategory = await this.categoryRepository.findOne({
+        where: { id: createCategoryPayload.parent },
+      });
+    }
+    const newCategory = this.categoryRepository.create({
+      ...createCategoryPayload,
+      parent: parentCategory,
+    });
     return mapToCategoryDto(await this.categoryRepository.save(newCategory));
   }
 
@@ -46,6 +55,12 @@ export class CategoryService {
   ): Promise<CategoryStatus> {
     const { id, name, description, isActive, isArchived } =
       updateCategoryPayload;
+    let parentCategory = undefined;
+    if (!!updateCategoryPayload.parent) {
+      parentCategory = await this.categoryRepository.findOne({
+        where: { id: updateCategoryPayload.parent },
+      });
+    }
     return mapToCategoryDto(
       await this.categoryRepository.save({
         id,
@@ -53,23 +68,68 @@ export class CategoryService {
         description,
         isActive,
         isArchived,
+        parent: parentCategory,
       }),
     );
   }
 
   public async getAllCategories(): Promise<CategoryStatus[]> {
-    return (await this.categoryRepository.find({})).map((category) =>
-      mapToCategoryDto(category),
-    );
+    const categories = await this.categoryRepository.find({
+      relations: {
+        products: {
+          photos: true,
+        },
+        parent: true,
+      },
+    });
+    const result = categories.map((category) => {
+      const categoryStatus = mapToCategoryDto(category);
+      for (const product of category.products) {
+        categoryStatus.photo =
+          product.photos &&
+          `${this.configService.get('PRODUCT_IMAGE_URL')}/${
+            product.photos[0].photo
+          }`;
+      }
+      return categoryStatus;
+    });
+
+    return result;
   }
 
   public async getCategory(id: string): Promise<CategoryStatus> {
     return mapToCategoryDto(
-      await this.categoryRepository.findOne({ where: { id } }),
+      await this.categoryRepository.findOne({
+        where: { id },
+        relations: {
+          parent: true,
+        },
+      }),
     );
   }
 
   public async deleteCategory(id: string): Promise<boolean> {
+    const numOfSubCategories = await this.categoryRepository
+      .createQueryBuilder('c')
+      .where('c.parentId = :parentId', { parentId: id })
+      .getCount();
+    if (numOfSubCategories > 0) {
+      throw new HttpException(
+        `Delete not allowed for category. ${numOfSubCategories} subcategories are assigned to this category.`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    const numOfProducts = await this.productRepository
+      .createQueryBuilder('p')
+      .where('p.category_id = :categoryId', { categoryId: id })
+      .getCount();
+
+    if (numOfProducts > 0) {
+      throw new HttpException(
+        `Delete not allowed for category. ${numOfProducts} products are assigned to this category.`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
     await this.categoryRepository.delete({ id });
     return !(await this.categoryRepository.exist({ where: { id } }));
   }

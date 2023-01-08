@@ -8,6 +8,8 @@ export class CategoryPayload {
   description: string;
   createdBy: string;
   lastUpdatedBy: string;
+
+  parent?: string;
 }
 
 export class UpdateCategoryPayload extends CategoryPayload {
@@ -22,6 +24,10 @@ export interface CategoryStatus {
   description: string;
   isActive: boolean;
   isArchived: boolean;
+
+  photo?: string;
+
+  parent?: CategoryStatus;
 }
 
 export interface CategoryProduct {
