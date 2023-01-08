@@ -56,13 +56,20 @@ export const mapPageDto = (data: Page): PageDto => {
 };
 
 export const mapToCategoryDto = (data: Category) => {
-  const { id, name, description, isActive, isArchived } = data;
-  const category: CategoryStatus = {
-    id,
-    name,
+  const { id, name, description, isActive, isArchived, parent } = data;
+  let parentCategoryStatus;
+  if (!!parent) {
+    parentCategoryStatus = mapToCategoryDto(parent);
+  }
+  let category: CategoryStatus;
+  // eslint-disable-next-line prefer-const
+  category = {
     description,
+    id,
     isActive,
     isArchived,
+    name,
+    parent: parentCategoryStatus,
   };
   return category;
 };
@@ -82,6 +89,7 @@ export const mapToProductResponse = (
     color,
     material,
     category,
+    gender
   } = data;
 
   const product: ProductResponse = {
@@ -96,6 +104,7 @@ export const mapToProductResponse = (
     material,
     category,
     photos,
+    gender
   };
 
   return product;
