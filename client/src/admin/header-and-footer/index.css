@@ -1,0 +1,23 @@
+.ybg {
+    background-color: #252a7b !important;
+}
+
+.ybg h3.title {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid red;
+}
+
+.ybg small {
+    font-size: .575rem !important;
+    border: 1px solid blue;
+}
+
+.nc-link > .nav-link {
+    color: #fff !important;
+}
+
+
+.nc-link > .nav-link.active {
+    text-decoration: underline;
+}

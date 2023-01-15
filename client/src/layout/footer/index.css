@@ -1,0 +1,13 @@
+.footer {
+    background-color: #252a7b !important;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer > .navbar-brand {
+    color: white;
+    font-size: .75rem;
+}

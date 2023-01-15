@@ -1,0 +1,7 @@
+.order-form > .row > .form-label, .order-form > .row .form-control {
+    font-size: .75rem;
+}
+
+.order-items > .row > .col {
+    font-size: .75rem;
+}
