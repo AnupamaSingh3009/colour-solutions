@@ -1,6 +1,6 @@
     export class URLs {
 
-    static BASE_URL = 'http://localhost:4000';
+    static BASE_URL = '';
 
     //MENU
     static GET_MENU_URL = `${URLs.BASE_URL}/menu`;
