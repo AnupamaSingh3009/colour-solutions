@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 
 export const useCart = () => {
-    const [cartItems, setCartItems] = useState(JSON.parse(window.localStorage.getItem("cart"))|| []);
+    const [cartItems, setCartItems] = useState(JSON.parse(window.sessionStorage.getItem("cart"))|| []);
 
     const onUpdateCart  = useCallback((event) => {
         const cartItem = event.detail;
@@ -22,12 +22,12 @@ export const useCart = () => {
             cartItemDraft.push({...cartItem, quantity: 1})
         }
         setCartItems(cartItemDraft);
-        window.localStorage.setItem('cart', JSON.stringify(cartItemDraft));
+        window.sessionStorage.setItem('cart', JSON.stringify(cartItemDraft));
     }, [cartItems]);
 
     const onClearCart = useCallback((event) => {
         setCartItems([]);
-        window.localStorage.removeItem('cart');
+        window.sessionStorage.removeItem('cart');
     }, []);
 
     useEffect(() => {

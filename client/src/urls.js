@@ -1,6 +1,6 @@
     export class URLs {
 
-    static BASE_URL = '';
+    static BASE_URL = 'http://159.65.156.88:4000';
 
     //MENU
     static GET_MENU_URL = `${URLs.BASE_URL}/menu`;

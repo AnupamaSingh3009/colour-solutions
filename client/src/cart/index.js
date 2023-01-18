@@ -14,7 +14,7 @@ export const ViewCart = (props) => {
     const {updateCart} = useCart();
     const currency = 'INR';
     useEffect( () => {
-        setCartItems(JSON.parse(window.localStorage.getItem('cart')) || []);
+        setCartItems(JSON.parse(window.sessionStorage.getItem('cart')) || []);
         setCount(cartItems.length);
     }, []);
 
@@ -28,13 +28,13 @@ export const ViewCart = (props) => {
         cartItem.quantity+=incrOrDec;
         //cartItem.quantity = parseInt(event.target.value);
         updateCart(cartItem);
-        setCartItems(JSON.parse(window.localStorage.getItem('cart')) || []);
+        setCartItems(JSON.parse(window.sessionStorage.getItem('cart')) || []);
     }
 
     const removeItem = (cartItem) => {
         cartItem.quantity = 0;
         updateCart(cartItem);
-        setCartItems(JSON.parse(window.localStorage.getItem('cart')) || []);
+        setCartItems(JSON.parse(window.sessionStorage.getItem('cart')) || []);
     }
 
     const handleProceedToCheckout = () => {

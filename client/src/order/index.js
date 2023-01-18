@@ -20,7 +20,7 @@ export const ViewOrder = () => {
 
     const currency = 'INR';
     useEffect( () => {
-        setCartItems(JSON.parse(window.localStorage.getItem('cart')) || []);
+        setCartItems(JSON.parse(window.sessionStorage.getItem('cart')) || []);
     }, []);
 
     return (
