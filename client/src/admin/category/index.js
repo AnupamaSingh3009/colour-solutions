@@ -71,7 +71,7 @@ function AdminCategory() {
         const categoryPayload = {
             name: categoryName,
             description: categoryDescription,
-            parent: categoryParent
+            parent: categoryParent ? categoryParent.id : undefined
         };
         let promise$;
         if(!!selectedCategory && !!selectedCategory.id) {
