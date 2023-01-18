@@ -12,6 +12,7 @@ export const Category = () => {
     const [category, setCategory] = useState({});
     const [products, setProducts] = useState([]);
     useEffect(() => {
+        //getSubCategories();
         getCategoryProducts();
     }, [name])
 

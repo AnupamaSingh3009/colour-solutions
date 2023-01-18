@@ -15,14 +15,13 @@ import { Product } from './model/product.entity';
 import { ProductPhotoEntity } from './model/product-photo.entity';
 import { ProductsModule } from './products/products.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../', 'product_images'),
+      rootPath: process.env.PRODUCT_IMAGE_PATH,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
