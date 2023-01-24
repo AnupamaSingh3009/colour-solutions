@@ -6,7 +6,7 @@ import {Breadcrumb, Button, Card, Carousel, Col, Container, Dropdown, DropdownBu
 import {Link} from "react-router-dom";
 import {publish, subscribe} from "../event";
 import {useCart} from "./use-cart";
-
+import './index.css';
 
 export function ProductDetail () {
     const {id} = useParams();
@@ -26,6 +26,22 @@ export function ProductDetail () {
         setIndex(selectedIndex);
     };
 
+    const getBreadCrumb = () => {
+        if(product && product.category) {
+            let current = product.category;
+            const breadCrumbs = [];
+            while(!!current) {
+                breadCrumbs.push(
+                    <Breadcrumb.Item key={current.id} linkAs={Link} linkProps={{to: '/category/'+current.name}}>
+                    {current.name.toUpperCase()}
+                    </Breadcrumb.Item>);
+                current = current.parent;
+            }
+            return breadCrumbs.reverse();
+        }
+        return [];
+    }
+
 
     return (
         <Card>
@@ -33,13 +49,8 @@ export function ProductDetail () {
                 <Card.Title>
                     <Breadcrumb className="nc-breadcrumb">
                         <Breadcrumb.Item linkAs={Link} linkProps={{to: '/'}}>HOME</Breadcrumb.Item>
-                        {
-                            product && product.category &&
-                            <Breadcrumb.Item linkAs={Link} linkProps={{to: '/category/'+product.category.name}}>
-                                {product.category.name.toUpperCase()}
-                            </Breadcrumb.Item>
-                        }
-                        <Breadcrumb.Item active>{product && product.name}</Breadcrumb.Item>
+                        {getBreadCrumb()}
+                        <Breadcrumb.Item active>{product && product.name && product.name.toUpperCase()}</Breadcrumb.Item>
                     </Breadcrumb>
                 </Card.Title>
                 <Container>
@@ -50,7 +61,7 @@ export function ProductDetail () {
                     </Row>
                     <Row>
                         <Col>
-                            <Carousel activeIndex={index} onSelect={handleSelect}>
+                            <Carousel activeIndex={index} onSelect={handleSelect} className="product_images">
                                 {product.photos && product.photos.map(photo => {
                                     return (
                                         <Carousel.Item key={photo.photo}>

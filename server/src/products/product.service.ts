@@ -85,7 +85,9 @@ export class ProductService {
     const dbProduct = await this.productRepository.findOne({
       where: { id },
       relations: {
-        category: true,
+        category: {
+          parent: true
+        },
         photos: true,
       },
     });

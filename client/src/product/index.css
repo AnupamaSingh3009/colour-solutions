@@ -1,0 +1,10 @@
+.product_images {
+
+}
+
+.product_images .carousel-control-next > span, .product_images .carousel-control-prev > span {
+   background-color: grey;
+    opacity: 0.5;
+    border-radius: 10%;
+
+}

@@ -251,7 +251,7 @@ export function AdminProducts() {
             return (
                 <tr key={product.id}>
                     <td>{product.name}</td>
-                    <td>{product.price}</td>
+                    <td>{product.price.toFixed(2)}</td>
                     <td>{product.category && product.category.name}</td>
                     <td>{product.size}</td>
                     <td>{product.material}</td>
@@ -421,7 +421,7 @@ export function AdminProducts() {
                                         <Form.Label>Price(<small>USD</small>)</Form.Label>
                                         <Form.Control
                                             required
-                                            type='text'
+                                            type='number'
                                             value={price}
                                             onChange={onChangePrice}
                                         />

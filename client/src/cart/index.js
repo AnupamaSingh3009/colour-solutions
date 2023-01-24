@@ -9,13 +9,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartPlus, faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
 
 export const ViewCart = (props) => {
-    const [count, setCount] = useState(0);
     const [cartItems, setCartItems] = useState([]);
     const {updateCart} = useCart();
     const currency = 'USD';
     useEffect( () => {
         setCartItems(JSON.parse(window.sessionStorage.getItem('cart')) || []);
-        setCount(cartItems.length);
     }, []);
 
     const totalPrice = useMemo(() => {
@@ -50,7 +48,7 @@ export const ViewCart = (props) => {
                         <Breadcrumb.Item active>VIEW CART</Breadcrumb.Item>
                     </Breadcrumb>
                 </Card.Title>
-                <h2 className="border-bottom border-2 p-3">SHOPPING BAG ({count} ITEMS)</h2>
+                <h2 className="border-bottom border-2 p-3">SHOPPING BAG ({cartItems.length || 0} ITEMS)</h2>
                <Container>
                    <Row>
                        <Col xs={8}>
