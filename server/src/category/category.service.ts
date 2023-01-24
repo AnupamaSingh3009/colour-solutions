@@ -11,6 +11,7 @@ import { mapToCategoryDto, mapToProductResponse } from 'src/shared/mapper';
 import { Repository } from 'typeorm';
 import { Product } from '../model/product.entity';
 import { ConfigService } from '@nestjs/config/dist';
+import { ProductPhotoEntity } from '../model/product-photo.entity';
 
 @Injectable()
 export class CategoryService {
@@ -19,7 +20,8 @@ export class CategoryService {
     private readonly categoryRepository: Repository<Category>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-
+    @InjectRepository(ProductPhotoEntity)
+    private readonly productPhotoRepository: Repository<ProductPhotoEntity>,
     private readonly configService: ConfigService,
   ) {}
 
@@ -86,7 +88,7 @@ export class CategoryService {
       const categoryStatus = mapToCategoryDto(category);
       for (const product of category.products) {
         categoryStatus.photo =
-          product.photos &&
+          product.photos && product.photos[0] &&
           `${this.configService.get('PRODUCT_IMAGE_URL')}/${
             product.photos[0].photo
           }`;
@@ -111,6 +113,7 @@ export class CategoryService {
   public async deleteCategory(id: string): Promise<boolean> {
     const numOfSubCategories = await this.categoryRepository
       .createQueryBuilder('c')
+
       .where('c.parentId = :parentId', { parentId: id })
       .getCount();
     if (numOfSubCategories > 0) {
@@ -143,6 +146,7 @@ export class CategoryService {
         products: {
           photos: true,
         },
+        parent: true
       },
     });
     if (!dbCategory) {
@@ -162,5 +166,53 @@ export class CategoryService {
         return mapToProductResponse(product, photos);
       }),
     } as CategoryProduct;
+  }
+
+  public async getSubCategoriesByCatName(
+    name: string
+  ): Promise<{ category: CategoryStatus; subcategories: CategoryStatus[] }> {
+    const dbCategory = await this.categoryRepository.findOne({
+      where: { name },
+      relations: {
+        parent: true
+      }
+    });
+    if (!dbCategory) {
+      throw new HttpException('Category Not Found', HttpStatus.BAD_REQUEST);
+    }
+    const subCategoriesStatus = await this.categoryRepository
+      .createQueryBuilder('c')
+      .where('c.parent = :parent', { parent: dbCategory.id })
+      .getMany();
+
+    const subcategories = [];
+    for (const cat of subCategoriesStatus) {
+      const photoEntity = await this.productPhotoRepository
+        .createQueryBuilder('pp')
+        .innerJoinAndSelect('products', 'p', 'p.id = pp.product_id')
+        .where('p.category_id = :catId ', { catId: cat.id })
+        .getOne();
+      const status = mapToCategoryDto(cat);
+
+      if (!!photoEntity) {
+        status.photo = `${this.configService.get('PRODUCT_IMAGE_URL')}/${
+          photoEntity.photo
+        }`;
+      }
+      subcategories.push(status);
+    }
+    return {
+      category: mapToCategoryDto(dbCategory),
+      subcategories,
+    };
+  }
+
+  public async getParentCategories(): Promise<CategoryStatus[]> {
+    return (
+      await this.categoryRepository
+        .createQueryBuilder('c')
+        .where('c.parentId is NULL')
+        .getMany()
+    ).map((cat) => mapToCategoryDto(cat));
   }
 }

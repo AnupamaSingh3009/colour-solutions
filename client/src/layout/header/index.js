@@ -24,7 +24,7 @@ function Header(){
             .then(response => response.data)
             .then(menu => setMenu(menu));
 
-        window.sessionStorage.setItem('currency', window.sessionStorage.getItem('currency') || 'INR');
+        window.sessionStorage.setItem('currency', window.sessionStorage.getItem('currency') || 'USD');
     }, []);
 
     const onSelectCurrency = (currency) => {

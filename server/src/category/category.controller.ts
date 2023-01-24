@@ -11,12 +11,14 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
-  CategoryPayload, CategoryProduct,
+  CategoryPayload,
+  CategoryProduct,
   CategoryStatus,
   UpdateCategoryPayload,
 } from 'src/dtos/category';
 import { CategoryService } from './category.service';
 import { ToUserDto } from 'src/dtos/user-dto';
+import Category from '../model/category.entity';
 
 @Controller('category')
 export class CategoryController {
@@ -64,9 +66,16 @@ export class CategoryController {
   }
 
   @Get('/name/:name')
-  public async getCategoryProductsByCatName(@Param("name") name: string): Promise<CategoryProduct> {
+  public async getCategoryProductsByCatName(
+    @Param('name') name: string,
+  ): Promise<CategoryProduct> {
     return this.categoryService.getCategoryProductsByCatName(name);
   }
 
-
+  @Get('/subcategories/:name')
+  public async getSubcategoriesByCatName(
+    @Param('name') name: string,
+  ): Promise<{ category: CategoryStatus; subcategories: CategoryStatus[] }> {
+    return this.categoryService.getSubCategoriesByCatName(name);
+  }
 }

@@ -1,4 +1,5 @@
 import Cookies from "universal-cookie/es6";
+import {Toast, ToastContainer} from "react-bootstrap";
 
 export const getAxiosError = (error) => {
     if(typeof error === 'object' && error.name === 'AxiosError') {
@@ -35,3 +36,4 @@ export const getAuthCookie = () => {
 export const removeAuthCookie = () => {
     cookie.remove('account');
 }
+

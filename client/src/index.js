@@ -21,6 +21,7 @@ import {AboutUs} from "./aboutus";
 import {Contactus} from "./contactus";
 import {ViewCart} from "./cart";
 import {ViewOrder} from "./order";
+import {ToastContainer} from "react-bootstrap";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -41,6 +42,7 @@ root.render(
         </Routes>
         </AuthProvider>
      </Router>
+
   </React.StrictMode>
 );
 

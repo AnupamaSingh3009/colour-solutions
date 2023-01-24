@@ -10,7 +10,7 @@ export class MenuService {
   ) {}
 
   public async getMenus(): Promise<MenuDto> {
-    const dbCategories = await this.categoryService.getAllCategories();
+    const dbCategories = await this.categoryService.getParentCategories();
 
     const dbPages = await this.pageService.findAll();
 

@@ -12,7 +12,7 @@ export function ProductDetail () {
     const {id} = useParams();
     const [index, setIndex] = useState(0);
     const [product, setProduct] = useState({});
-    const currency = 'INR';
+    const currency = 'USD';
     const {updateCart} = useCart();
 
     useEffect(() => {

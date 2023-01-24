@@ -35,6 +35,7 @@ import { MenuModule } from './menu/menu.module';
         database: configService.get('POSTGRES_DATABASE'),
         entities: [User, Page, Category, Product, ProductPhotoEntity],
         synchronize: true,
+        logging: false
       }),
       inject: [ConfigService],
     }),

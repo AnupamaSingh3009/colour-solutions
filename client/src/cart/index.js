@@ -12,7 +12,7 @@ export const ViewCart = (props) => {
     const [count, setCount] = useState(0);
     const [cartItems, setCartItems] = useState([]);
     const {updateCart} = useCart();
-    const currency = 'INR';
+    const currency = 'USD';
     useEffect( () => {
         setCartItems(JSON.parse(window.sessionStorage.getItem('cart')) || []);
         setCount(cartItems.length);

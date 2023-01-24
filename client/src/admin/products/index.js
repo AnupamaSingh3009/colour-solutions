@@ -15,6 +15,7 @@ import { useEffect, useState} from "react";
 import axios from "axios";
 import { URLs } from "../../urls";
 import {ImageTab} from "./image-tab";
+import {getAxiosError} from "../../utils";
 
 
 export function AdminProducts() {
@@ -33,6 +34,7 @@ export function AdminProducts() {
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const [error, setError] = useState('');
+    const [pageError, setPageError] = useState('');
     const [gender, setGender] = useState('U');
     const [quantity, setQuantity] = useState(0);
     //Images
@@ -48,7 +50,12 @@ export function AdminProducts() {
 
         getProductList();
 
-    }, )
+    }, [])
+
+    const pageErrorHandler = (error) => {
+        const axiosPageError = getAxiosError(error);
+        setPageError(axiosPageError.message || '')
+    }
 
     const getProductList = () => {
         axios.get(URLs.GET_PRODUCT_URL, {params: {page,pageSize}})
@@ -95,7 +102,7 @@ export function AdminProducts() {
         getProductById(id).then(product => {
             setSelectedProduct(product);
             setUploadModalShow(true);
-        });
+        }).catch(error => pageErrorHandler(error));
     }
 
     const handleUploadModalClose = () => {
@@ -136,7 +143,7 @@ export function AdminProducts() {
                 setShow(true);
                 setGender(product.gender);
                 setQuantity(product.quantity);
-            })
+            }).catch(error => pageErrorHandler(error))
     }
 
     const handleShowConfirmModal = (id) => {
@@ -144,7 +151,7 @@ export function AdminProducts() {
             .then(product => {
                 setSelectedProduct(product);
                 setDeleteShow(true);
-            });
+            }).catch(error => pageErrorHandler(error));
     }
     const handleDeleteModalClose = () => {
         selectedProduct({});
@@ -194,7 +201,7 @@ export function AdminProducts() {
         promise$.then(() => {
             getProductList();
             reset();
-        })
+        }).catch(error => pageErrorHandler(error));
     }
 
     const handleProductImages = () => {
@@ -210,7 +217,7 @@ export function AdminProducts() {
             .then(() => {
                 setUploadModalShow(false);
                 setImages([]);
-            })
+            }).catch(error => pageErrorHandler(error));
     }
 
     const handleDeleteProduct = () => {
@@ -222,7 +229,7 @@ export function AdminProducts() {
                     setDeleteShow(false);
                     reset();
                     getProductList();
-                })
+                }).catch(error => pageErrorHandler(error));
         }
     }
 
@@ -293,6 +300,11 @@ export function AdminProducts() {
             <Card className="mt">
                 <Card.Header><h2>Products</h2></Card.Header>
                 <Card.Body>
+                    {!!pageError && <Alert key="danger" variant='danger' dismissible onClose={() => reset()}>
+                        <Alert.Heading>Oh! You got an error!</Alert.Heading>
+                        <p>{pageError}</p>
+                    </Alert>
+                    }
                     <Button variant="primary" onClick={handleShow}>
                         <FontAwesomeIcon icon={faPlus} /> Create Product
                     </Button>
@@ -301,7 +313,7 @@ export function AdminProducts() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Price(INR)</th>
+                            <th>Price(USD)</th>
                             <th>Category</th>
                             <th>Size</th>
                             <th>Material</th>
@@ -406,7 +418,7 @@ export function AdminProducts() {
                                         />
                                     </Col>
                                     <Col>
-                                        <Form.Label>Price(<small>INR</small>)</Form.Label>
+                                        <Form.Label>Price(<small>USD</small>)</Form.Label>
                                         <Form.Control
                                             required
                                             type='text'

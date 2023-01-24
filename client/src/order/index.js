@@ -18,7 +18,7 @@ export const ViewOrder = () => {
     const [orderBy, setOrderBy] = useState({...orderInfo});
     const [shipTo, setShipTo] = useState({...orderInfo});
 
-    const currency = 'INR';
+    const currency = 'USD';
     useEffect( () => {
         setCartItems(JSON.parse(window.sessionStorage.getItem('cart')) || []);
     }, []);

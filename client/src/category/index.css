@@ -1,8 +1,15 @@
-.product-list {
+.product-list, .categories-list {
     list-style: none;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+}
+
+.categories-list > li > category-box {
+    margin-top: 1rem;
+    position: relative;
+    width: 100%;
+    border: 1px solid red;
 }
 
 .product-list > li > .product-box {
@@ -48,12 +55,12 @@
 }
 
 
-.product-list > li > .card > a {
+.product-list > li > .card > a, .categories-list > li > .card > a {
     color: #000;
     text-decoration: none;
 }
 
-.product-list > li > .card > a  .card-title {
+.product-list > li > .card > a  .card-title, .categories-list > li > .card > a  .card-title {
     font-size: 1rem;
 
 }

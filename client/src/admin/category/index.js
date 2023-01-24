@@ -1,4 +1,3 @@
-import { Card, Table, Modal, Button, Form, ButtonGroup, Alert } from "react-bootstrap";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlus, faPencil, faTrash} from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from "react";
@@ -6,6 +5,7 @@ import axios from "axios";
 import { URLs } from "../../urls";
 import './index.css';
 import { getAxiosError } from "../../utils";
+ import {Alert, Button, ButtonGroup, Card, Form, Modal, Table, Toast, ToastContainer} from "react-bootstrap";
 
 function AdminCategory() {
     const [show, setShow] = useState(false);
@@ -16,6 +16,7 @@ function AdminCategory() {
     const [categoryDescription, setCategoryDescription] = useState('');
     const [categoryParent, setCategoryParent] = useState('');
     const [selectedCategory, setSelectedCategory] = useState({});
+    const [pageError, setPageError] = useState('');
 
     useEffect(() => {
         let mounted = true;
@@ -40,6 +41,7 @@ function AdminCategory() {
         setSelectedCategory({});
         setDeleteShow(false);
         setCategoryParent({});
+        setPageError('');
     }
 
     const onChangeCategoryName = (event) => {
@@ -51,7 +53,9 @@ function AdminCategory() {
     }
 
     const onChangeCategoryParent = (event) => {
-        setCategoryParent(event.target.value);
+        const parentID = event.target.value;
+        const parent = categories.find(cat => cat.id === parentID);
+        setCategoryParent(parent);
     }
 
     const handleClose = () => {
@@ -80,18 +84,18 @@ function AdminCategory() {
         } else {
             promise$ = axios.post(URLs.CREATE_CATEGORY_URL, categoryPayload);
         }
+        const errorHandler = (error) => {
+            const err = getAxiosError(error);
+            setPageError(err.message || '');
+            reset();
+            setSelectedCategory({});
+        };
         promise$.then( () => {
             getCategories().then(categories => {
                 setCategories(categories);
                 reset();
-            }).catch(error => {
-                const err = getAxiosError(error);
-                setError(err.message || '');
-            })
-        }).catch(error => {
-            const err = getAxiosError(error);
-            setError(err.message || '');
-        });
+            }).catch(error => errorHandler(error))
+        }).catch(error => errorHandler(error));
     }
 
     const handleShowConfirmModal = (id) => {
@@ -118,6 +122,12 @@ function AdminCategory() {
     }
 
     const handleDeleteCategory = () => {
+        const errorHandler = (error) => {
+            const err = getAxiosError(error);
+            setPageError(err.message || '');
+            setDeleteShow(false);
+            setSelectedCategory({});
+        }
         if(!!selectedCategory && !!selectedCategory.id) {
             axios.delete(`${URLs.DELETE_CATEGORY_URL}/${selectedCategory.id}`).then((deleted) => {
                 if(deleted) {
@@ -126,12 +136,9 @@ function AdminCategory() {
                         reset();
                         setDeleteShow(false);
                         setSelectedCategory({});
-                    }).catch(error => {
-                        const err = getAxiosError(error);
-                        setError(err.message || '');
-                    });
+                    }).catch(error => errorHandler(error));
                 }
-            })
+            }).catch(error => errorHandler(error))
         }
     }
 
@@ -166,9 +173,15 @@ function AdminCategory() {
        <Card className="mt">
         <Card.Header><h2>Category</h2></Card.Header>
         <Card.Body>
+            {!!pageError && <Alert key="danger" variant='danger' dismissible onClose={() => reset()}>
+                <Alert.Heading>Oh! You got an error!</Alert.Heading>
+                <p>{pageError}</p>
+            </Alert>
+            }
             <Button variant="primary" onClick={handleShow}>
                 <FontAwesomeIcon icon={faPlus} /> Create Category
             </Button>
+
             <Table striped bordered hover className="mt">
                 <thead>
                     <tr>
@@ -201,13 +214,13 @@ function AdminCategory() {
             </Button>
         </Modal.Footer>
        </Modal>
-
+       {/* Create and Edit Category */}
        <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{selectedCategory && selectedCategory.id ? 'Edit' : 'Create'} Category</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            {error && 
+            {error &&
                 <Alert key='danger' variant='danger'>
                     {error}
                 </Alert>
@@ -216,8 +229,8 @@ function AdminCategory() {
                 <Form.Group>
                     <Form.Label>Name</Form.Label>
                     <Form.Control
-                        required 
-                        type='text' 
+                        required
+                        type='text'
                         value={categoryName}
                         onChange={onChangeCategoryName}
                     />
@@ -233,8 +246,8 @@ function AdminCategory() {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Description</Form.Label>
-                    <Form.Control 
-                        as='textarea' 
+                    <Form.Control
+                        as='textarea'
                         rows={3}
                         value={categoryDescription}
                         onChange={onChangeCategoryDescription}
