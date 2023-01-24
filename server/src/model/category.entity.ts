@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { ProductPhotoEntity } from './product-photo.entity';
 import { Product } from './product.entity';
@@ -15,7 +15,7 @@ export default class Category extends BaseEntity {
   @JoinColumn()
   products: Product[];
 
-  @OneToOne(() => Category, (category) => category.id)
+  @ManyToOne(() => Category, (category) => category.id)
   @JoinColumn()
   parent: Category;
 }
