@@ -31,7 +31,6 @@ export function AdminProducts() {
     const [color, setColor] = useState('');
     const [material, setMaterial] = useState('');
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const [error, setError] = useState('');
     const [pageError, setPageError] = useState('');
@@ -42,15 +41,18 @@ export function AdminProducts() {
     const [uploadModalShow, setUploadModalShow] = useState(false);
     const numberOfImageInputPerModal = 5;
     const [deleteShow, setDeleteShow] = useState(false);
+    const pageSize = 5;
 
     useEffect(() => {
         axios.get(URLs.GET_CATEGORY_URL)
         .then(response => response.data)
         .then(categories => setCategories(categories));
+    }, []);
 
+
+    useEffect(() => {
         getProductList();
-
-    }, [])
+    }, [page])
 
     const pageErrorHandler = (error) => {
         const axiosPageError = getAxiosError(error);
@@ -58,13 +60,11 @@ export function AdminProducts() {
     }
 
     const getProductList = () => {
-        axios.get(URLs.GET_PRODUCT_URL, {params: {page,pageSize}})
+        axios.get(URLs.GET_PRODUCT_URL, {params: {page,size: pageSize}})
             .then(response => response.data)
             .then(pagination => {
                 setProducts([...pagination.content]);
                 setTotalCount(pagination.count);
-                setPage(pagination.page);
-                setPageSize(pagination.size);
             });
     }
 
@@ -88,6 +88,9 @@ export function AdminProducts() {
     const onChangeGender = (event) => setGender(event.target.value);
 
     const onChangeQuantity = (event) => setQuantity(event.target.value);
+
+    const onChangePage = (page) => setPage(page);
+
     const handleShow = () => {
         reset();
         setShow(true);
@@ -293,7 +296,7 @@ export function AdminProducts() {
     const paginationItems = [];
     const numOfPages = Math.ceil(totalCount / pageSize);
     for(let p = 1; p <= numOfPages; p++) {
-        paginationItems.push(<Pagination.Item key={p} active={p === +page}>{p}</Pagination.Item>)
+        paginationItems.push(<Pagination.Item key={p} active={p === +page} onClick = {() => onChangePage(p)}>{p}</Pagination.Item>)
     }
     return (
         <>
@@ -330,11 +333,11 @@ export function AdminProducts() {
                         <tr>
                             <td colSpan={8} >
                                 <Pagination style={{justifyContent: 'end'}}>
-                                    <Pagination.First />
-                                    <Pagination.Prev />
+                                    <Pagination.First onClick = {() => onChangePage(1)}/>
+                                    <Pagination.Prev onClick = {() => onChangePage(page - 1)} />
                                     {paginationItems}
-                                    <Pagination.Next />
-                                    <Pagination.Last />
+                                    <Pagination.Next onClick = {() => onChangePage(page + 1)}/>
+                                    <Pagination.Last onClick = {() => onChangePage(Math.ceil(totalCount/pageSize))}/>
                                 </Pagination>
                             </td>
                         </tr>
