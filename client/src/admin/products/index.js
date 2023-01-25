@@ -41,7 +41,7 @@ export function AdminProducts() {
     const [uploadModalShow, setUploadModalShow] = useState(false);
     const numberOfImageInputPerModal = 5;
     const [deleteShow, setDeleteShow] = useState(false);
-    const pageSize = 5;
+    const pageSize = 10;
 
     useEffect(() => {
         axios.get(URLs.GET_CATEGORY_URL)
