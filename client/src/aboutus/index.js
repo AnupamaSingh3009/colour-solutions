@@ -1,10 +1,16 @@
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Breadcrumb, Card, Col, Container, Row, Image} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 export const AboutUs = () => {
     return (
         <Card>
-            <Card.Header><h2>About US</h2></Card.Header>
             <Card.Body>
+                <Card.Title>
+                    <Breadcrumb className="nc-breadcrumb">
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: '/'}}>HOME</Breadcrumb.Item>
+                        <Breadcrumb.Item active>ABOUT US</Breadcrumb.Item>
+                    </Breadcrumb>
+                </Card.Title>
                 <Container>
                     <Row>
                         <Col>
@@ -13,13 +19,18 @@ export const AboutUs = () => {
                         <Col>
                             <h2>Company</h2>
                             <p>
-                                Now in its 10th year since its inception in 2012, CS has been on quite the journey. Styled to spell class and hand-crafted to give you a piece that’s truly one of a kind, CS offers you leather accessories with sophisticated detailing and exquisite textures in the season’s must-have colors. Apart from the physical craftsmanship that goes into every CS piece, we infuse it with the soul of CS. The brand carries with it an aura of sophistication, endurance, and quality. The logo, inspired by the Royal Seals of old, symbolizes tradition, passion for perfection, and a quiet elegance reserved for a chosen few. It is a seal of approval on each and every one of its high-quality hand-crafted and engineered leatherware.
+                                Now in its 7th year since its inception in 2015, CS has been on quite the journey. Styled to spell class and hand-crafted to give you a piece that’s truly one of a kind, CS offers you leather accessories with sophisticated detailing and exquisite textures in the season’s must-have colors. Apart from the physical craftsmanship that goes into every CS piece, we infuse it with the soul of CS. The brand carries with it an aura of sophistication, endurance, and quality. The logo, inspired by the Royal Seals of old, symbolizes tradition, passion for perfection, and a quiet elegance reserved for a chosen few. It is a seal of approval on each and every one of its high-quality hand-crafted and engineered leatherware.
                             </p>
                             <h3>Milestones</h3>
                             <ul>
-                                <li>Founded in 2000</li>
+                                <li>Founded in 2015</li>
                                 <li>24/7 native support</li>
                             </ul>
+                            <h3>Team</h3>
+                            <p className="text-center">
+                                <Image src="/csOwner.jpeg" roundedCircle style={{width: '150px'}}/>
+                                <p>Mr. Ajeet Singh</p>
+                            </p>
                         </Col>
                     </Row>
                 </Container>
