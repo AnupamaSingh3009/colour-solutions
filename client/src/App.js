@@ -20,7 +20,7 @@ function App() {
                 <Col xl={6} lg={8}>
                     <h1>Colours Solution<span>.</span></h1>
                     <h2>
-                        We are one of the leading companies in Kanpur to deal in various types of raw leather and leather chemical products and our major strength is dyeing of various raw leather
+                    One of the top businesses in Kanpur, India, dealing in various kinds of leather and leather products, Colours Solution began operations in 2011.
                     </h2>
                 </Col>
             </Row>

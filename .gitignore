@@ -1,0 +1,4 @@
+
+node_modules    
+product_images/*.*
+.idea/**/*.*
