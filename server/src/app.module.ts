@@ -22,6 +22,7 @@ import { MenuModule } from './menu/menu.module';
     ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
       rootPath: process.env.PRODUCT_IMAGE_PATH,
+      exclude: ['/users/(.*)', '/auth/(.*)', '/category/(.*)', '/products/(.*)', '/pages/(.*)', '/menu/(.*)'],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

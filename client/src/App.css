@@ -26,6 +26,10 @@
   text-align: center;
 }
 
+.offcanvas {
+  background-color: #252a7b !important;
+}
+
 #cover h1 > span {
   color: #ffffff;
 }

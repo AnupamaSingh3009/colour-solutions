@@ -24,6 +24,7 @@ export const LoginComponent = () => {
             password
         };
         auth.login(loginPayload).then((token) => {
+            console.log("Token ", token);
             navigate('/admin/category');
         }).catch(error => {
             console.log('errr', error);

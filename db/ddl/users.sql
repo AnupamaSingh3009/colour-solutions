@@ -1,4 +1,4 @@
-CREATE TABLE "catalog".users (
+CREATE  TABLE "catalog"."Users" (
 	userid integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 	username varchar NOT NULL,
 	id integer NOT NULL GENERATED ALWAYS AS IDENTITY,

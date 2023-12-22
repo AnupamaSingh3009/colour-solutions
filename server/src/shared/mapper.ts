@@ -91,6 +91,7 @@ export const mapToProductResponse = (
     category,
     gender,
     quantity,
+    minOrderQty
   } = data;
 
   const product: ProductResponse = {
@@ -107,6 +108,7 @@ export const mapToProductResponse = (
     photos,
     gender,
     quantity,
+    minOrderQty
   };
 
   return product;

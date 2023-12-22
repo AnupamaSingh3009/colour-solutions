@@ -39,6 +39,7 @@ export interface ProductResponse {
   photos: ProductPhotoResponse[];
   gender: GenderEnum;
   quantity: number;
+  minOrderQty: number;
 }
 
 export interface ProductPhotoResponse {

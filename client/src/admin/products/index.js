@@ -36,6 +36,7 @@ export function AdminProducts() {
     const [pageError, setPageError] = useState('');
     const [gender, setGender] = useState('U');
     const [quantity, setQuantity] = useState(0);
+    const [minOrderQty, setMinOrderQty] = useState(0);
     //Images
     const [images, setImages] = useState([]);
     const [uploadModalShow, setUploadModalShow] = useState(false);
@@ -88,6 +89,7 @@ export function AdminProducts() {
     const onChangeGender = (event) => setGender(event.target.value);
 
     const onChangeQuantity = (event) => setQuantity(event.target.value);
+    const onChangeMinOrderQuantity = (event) => setMinOrderQty(event.target.value);
 
     const onChangePage = (page) => setPage(page);
 
@@ -130,6 +132,7 @@ export function AdminProducts() {
         setSelectedProduct({});
         setGender('U');
         setQuantity(0);
+        setMinOrderQty(0);
     }
 
     const handleEditProduct = (id) => {
@@ -146,6 +149,7 @@ export function AdminProducts() {
                 setShow(true);
                 setGender(product.gender);
                 setQuantity(product.quantity);
+                setMinOrderQty(product.minOrderQty);
             }).catch(error => pageErrorHandler(error))
     }
 
@@ -191,7 +195,8 @@ export function AdminProducts() {
             color,
             price,
             gender,
-            quantity
+            quantity,
+            minOrderQty 
         }
         let promise$;
         if(selectedProduct && selectedProduct.id) {
@@ -260,6 +265,7 @@ export function AdminProducts() {
                     <td>{product.material}</td>
                     <td>{product.color}</td>
                     <td>{product.gender && product.gender === 'M' ? 'Male' : product.gender === 'F' ? 'Female' : 'Unisex'}</td>
+                    <td>{product.minOrderQty}</td>
                     <td>{product.quantity}</td>
                     <td>
                         <ButtonGroup size="sm">
@@ -322,7 +328,8 @@ export function AdminProducts() {
                             <th>Material</th>
                             <th>Color</th>
                             <th>Gender</th>
-                            <th>Quantity</th>
+                            <th>Min. Order Quantity</th>
+                            <th>Stock</th>
                             <th className="wd-64">Action</th>
                         </tr>
                     </thead>
@@ -410,6 +417,15 @@ export function AdminProducts() {
                                             <option >Select Category</option>
                                             {getCategoryOptions()}
                                         </Form.Select>
+                                    </Col>
+                                    <Col>
+                                        <Form.Label>Min Order Quantity</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type='text'
+                                            value={minOrderQty}
+                                            onChange={onChangeMinOrderQuantity}
+                                        />
                                     </Col>
                                     <Col>
                                         <Form.Label>Quantity</Form.Label>

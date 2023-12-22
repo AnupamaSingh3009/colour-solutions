@@ -14,7 +14,6 @@ export const AuthProvider = ({children}) => {
             const response = await axios.post(URLs.LOGIN_URL, authDetails);
             setAuth(response.data);
             setAuthCookie(response.data)
-            window.sessionStorage.setItem('account', JSON.stringify(response.data));
             return response.data.accessToken;
         } catch(error) {
             window.sessionStorage.removeItem('account');

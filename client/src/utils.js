@@ -11,7 +11,7 @@ export const getAxiosError = (error) => {
     }
 }
 
-const cookie = new Cookies()
+const cookie = new Cookies();
 export const setAuthCookie = (data) => {
     const expiresIn = data.expiresIn.substring(0, data.expiresIn.length - 1);
     const unit = data.expiresIn.substring(data.expiresIn.length - 1, data.expiresIn.length);
@@ -26,11 +26,12 @@ export const setAuthCookie = (data) => {
     const accessToken = data.accessToken;
     expires*=expiresIn;
     expires+= (new Date()).getTime();
-    cookie.set('account', accessToken, {expires: new Date(expires)})
+    
+    cookie.set('account', accessToken, {path: '/', expires: new Date(expires)})
 }
 
 export const getAuthCookie = () => {
-    return cookie.get('account')
+    return cookie.get('account');
 }
 
 export const removeAuthCookie = () => {

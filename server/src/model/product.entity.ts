@@ -40,4 +40,7 @@ export class Product extends BaseEntity {
 
   @Column({ type: 'numeric', default: 0 })
   quantity: number;
+
+  @Column({type: 'numeric', default: 0})
+  minOrderQty: number;
 }

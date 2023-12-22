@@ -46,7 +46,7 @@ function Header(){
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Colour Solutions
+                <img src='/subtitle.jpeg' alt="Colour Solutions" height='45'/>
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>
